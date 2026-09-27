@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chaos Arcade - Don't Press</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .dontGame {
+            max-width: 700px;
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        .warning {
+            font-size: 70px;
+            margin: 20px;
+        }
+
+        .bigButtonArea {
+            height: 330px;
+            background: #20202d;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #dontButton {
+            background: #e63946;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 12px 0 #9d1d28,
+                        0 20px 30px rgba(0,0,0,0.4);
+            transition: 0.15s;
+        }
+
+        #dontButton:hover {
+            transform: scale(1.05);
+        }
+
+        #dontButton:active {
+            transform: translateY(10px);
+            box-shadow: 0 3px 0 #9d1d28;
+        }
+
+        #message {
+            margin: 25px 0;
+            min-height: 80px;
+            font-size: 22px;
+            color: #ffd166;
+        }
+
+        .counter {
+            background: #20202d;
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="top">
+
+        <h1>🚫 DON'T PRESS THE BUTTON</h1>
+
+        <p>
+            Seriously... DON'T. 👀
+        </p>
+
+    </div>
+
+
+    <div class="dontGame">
+
+        <div class="warning">
+            ⚠️
+        </div>
+
+        <div class="counter">
+            Presses: <b id="count">0</b>
+        </div>
+
+
+        <div class="bigButtonArea">
+
+            <button id="dontButton" onclick="pressed()">
+                DON'T<br>PRESS ME
+            </button>
+
+        </div>
+
+
+        <div id="message">
+            😇 You can leave now.
+            Nobody will know.
+        </div>
+
+
+        <button onclick="resetGame()">
+            🔄 RESET
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let count = 0;
+
+const messages = [
+
+    "💀 I TOLD YOU NOT TO PRESS IT!",
+
+    "😭 WHY WOULD YOU DO THAT?!",
+
+    "🤨 You literally had ONE job.",
+
+    "😂 I knew you couldn't resist.",
+
+    "🗿 Congratulations. You pressed a button.",
+
+    "👀 Again?! REALLY?!",
+
+    "🤦 My disappointment is immeasurable.",
+
+    "💀 Your curiosity is dangerous.",
+
+    "😂 The button is judging you.",
+
+    "🚨 BUTTON POLICE HAVE BEEN NOTIFIED!"
+
+];
+
+
+function pressed() {
+
+    count++;
+
+    document.getElementById("count").innerText =
+        count;
+
+
+    let randomMessage =
+        messages[Math.floor(Math.random() * messages.length)];
+
+
+    document.getElementById("message").innerText =
+        randomMessage;
+
+
+    const button =
+        document.getElementById("dontButton");
+
+    
+    // After a few clicks, make the button move
+    if (count >= 3) {
+
+        moveButton();
+
+    }
+
+
+    // Change button text
+    if (count === 5) {
+
+        button.innerHTML =
+            "STOP<br>PLEASE 😭";
+
+    }
+
+    if (count === 8) {
+
+        button.innerHTML =
+            "OKAY<br>LAST ONE";
+
+    }
+
+    if (count >= 10) {
+
+        document.getElementById("message").innerText =
+            "🏆 YOU WIN! You successfully ignored absolutely nothing! 💀";
+
+        button.innerHTML =
+            "I'M SORRY 😭";
+
+    }
+
+}
+
+
+function moveButton() {
+
+    const area =
+        document.querySelector(".bigButtonArea");
+
+    const button =
+        document.getElementById("dontButton");
+
+
+    const maxX =
+        area.clientWidth - button.offsetWidth;
+
+    const maxY =
+        area.clientHeight - button.offsetHeight;
+
+
+    const x =
+        Math.random() * maxX;
+
+    const y =
+        Math.random() * maxY;
+
+
+    button.style.position = "absolute";
+
+    button.style.left = x + "px";
+
+    button.style.top = y + "px";
+
+}
+
+
+function resetGame() {
+
+    count = 0;
+
+    document.getElementById("count").innerText =
+        "0";
+
+    document.getElementById("message").innerText =
+        "😇 You can leave now. Nobody will know.";
+
+    const button =
+        document.getElementById("dontButton");
+
+    button.innerHTML =
+        "DON'T<br>PRESS ME";
+
+    button.style.position = "static";
+
+}
+
+</script>
+
+</body>
+</html>

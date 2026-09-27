@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chaos Arcade - Rock Paper Scissors</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .battle {
+            max-width: 650px;
+            margin: 35px auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .player {
+            background: #20202d;
+            padding: 30px;
+            border-radius: 20px;
+            width: 200px;
+        }
+
+        .player h3 {
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+
+        .choice {
+            font-size: 80px;
+            min-height: 100px;
+        }
+
+        .vs {
+            font-size: 30px;
+            font-weight: bold;
+            color: #8b7cff;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .choiceBtn {
+            font-size: 45px;
+            width: 90px;
+            height: 90px;
+            border: none;
+            border-radius: 20px;
+            background: #29293b;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .choiceBtn:hover {
+            transform: translateY(-8px) scale(1.05);
+            background: #8b7cff;
+        }
+
+        .score {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px 0;
+            font-size: 18px;
+        }
+
+        .score span {
+            background: #20202d;
+            padding: 12px 22px;
+            border-radius: 15px;
+        }
+
+        #resultText {
+            min-height: 70px;
+            font-size: 24px;
+            color: #ffd166;
+        }
+
+        @media(max-width:600px) {
+
+            .battle {
+                gap: 10px;
+            }
+
+            .player {
+                padding: 20px 10px;
+                width: 140px;
+            }
+
+            .choice {
+                font-size: 55px;
+            }
+
+            .choiceBtn {
+                width: 70px;
+                height: 70px;
+                font-size: 35px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="top">
+
+        <h1>✋ ROCK PAPER SCISSORS</h1>
+
+        <p>
+            Defeat the computer... if you can 😈
+        </p>
+
+    </div>
+
+
+    <div class="score">
+
+        <span>YOU: <b id="playerScore">0</b></span>
+
+        <span>CPU: <b id="cpuScore">0</b></span>
+
+        <span>DRAWS: <b id="drawScore">0</b></span>
+
+    </div>
+
+
+    <div class="battle">
+
+        <div class="player">
+
+            <h3>YOU</h3>
+
+            <div id="playerChoice" class="choice">
+                ❓
+            </div>
+
+        </div>
+
+
+        <div class="vs">
+            VS
+        </div>
+
+
+        <div class="player">
+
+            <h3>COMPUTER</h3>
+
+            <div id="cpuChoice" class="choice">
+                🤖
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="resultText">
+        Choose your weapon! 👇
+    </div>
+
+
+    <div class="choices">
+
+        <button class="choiceBtn"
+                onclick="play('rock')">
+            🪨
+        </button>
+
+        <button class="choiceBtn"
+                onclick="play('paper')">
+            📄
+        </button>
+
+        <button class="choiceBtn"
+                onclick="play('scissors')">
+            ✂️
+        </button>
+
+    </div>
+
+
+    <button onclick="resetGame()">
+        🔄 RESET SCORE
+    </button>
+
+</div>
+
+
+<script>
+
+let playerScore = 0;
+let cpuScore = 0;
+let drawScore = 0;
+
+
+const emojis = {
+
+    rock: "🪨",
+
+    paper: "📄",
+
+    scissors: "✂️"
+
+};
+
+
+function computerChoice() {
+
+    const choices = [
+        "rock",
+        "paper",
+        "scissors"
+    ];
+
+    return choices[
+        Math.floor(Math.random() * choices.length)
+    ];
+
+}
+
+
+function play(player) {
+
+    const cpu = computerChoice();
+
+
+    document.getElementById("playerChoice").innerText =
+        emojis[player];
+
+    document.getElementById("cpuChoice").innerText =
+        emojis[cpu];
+
+
+    let result;
+
+
+    if (player === cpu) {
+
+        drawScore++;
+
+        result = "😐 DRAW! The computer copied you!";
+
+    }
+
+    else if (
+
+        (player === "rock" && cpu === "scissors") ||
+
+        (player === "paper" && cpu === "rock") ||
+
+        (player === "scissors" && cpu === "paper")
+
+    ) {
+
+        playerScore++;
+
+        result = getWinMessage();
+
+    }
+
+    else {
+
+        cpuScore++;
+
+        result = getLoseMessage();
+
+    }
+
+
+    updateScore();
+
+
+    document.getElementById("resultText").innerText =
+        result;
+
+}
+
+
+function getWinMessage() {
+
+    const messages = [
+
+        "🔥 BOOM! YOU WON!",
+
+        "😎 COMPUTER GOT DESTROYED!",
+
+        "👑 YOU ARE THE BOSS!",
+
+        "😂 CPU NEEDS AN UPDATE!",
+
+        "⚡ TOO EASY FOR YOU!"
+
+    ];
+
+    return messages[
+        Math.floor(Math.random() * messages.length)
+    ];
+
+}
+
+
+function getLoseMessage() {
+
+    const messages = [
+
+        "💀 COMPUTER WINS! Ouch.",
+
+        "😂 BRO GOT OUTPLAYED!",
+
+        "🤖 THE CPU IS LAUGHING!",
+
+        "😭 THAT DID NOT GO WELL!",
+
+        "🗿 BETTER LUCK NEXT TIME!"
+
+    ];
+
+    return messages[
+        Math.floor(Math.random() * messages.length)
+    ];
+
+}
+
+
+function updateScore() {
+
+    document.getElementById("playerScore").innerText =
+        playerScore;
+
+    document.getElementById("cpuScore").innerText =
+        cpuScore;
+
+    document.getElementById("drawScore").innerText =
+        drawScore;
+
+}
+
+
+function resetGame() {
+
+    playerScore = 0;
+
+    cpuScore = 0;
+
+    drawScore = 0;
+
+    updateScore();
+
+    document.getElementById("playerChoice").innerText =
+        "❓";
+
+    document.getElementById("cpuChoice").innerText =
+        "🤖";
+
+    document.getElementById("resultText").innerText =
+        "Choose your weapon! 👇";
+
+}
+
+</script>
+
+</body>
+</html>

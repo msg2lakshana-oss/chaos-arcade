@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>🎮 Chaos Arcade</title>
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#8b7cff">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #302b63, #11111b 60%);
+        }
+
+        .arcade {
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 55px;
+            margin-bottom: 5px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 35px;
+            font-size: 18px;
+        }
+
+        .games {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .gameCard {
+            background: rgba(32,32,45,0.95);
+            border: 1px solid #39394d;
+            border-radius: 22px;
+            padding: 25px;
+            transition: 0.25s;
+        }
+
+        .gameCard:hover {
+            transform: translateY(-10px) rotate(1deg);
+            border-color: #8b7cff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .gameIcon {
+            font-size: 55px;
+            margin-bottom: 12px;
+        }
+
+        .gameCard h2 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .gameCard p {
+            color: #aaa;
+            min-height: 45px;
+            font-size: 14px;
+        }
+
+        .playBtn {
+            margin-top: 15px;
+            width: 100%;
+            background: #8b7cff;
+        }
+
+        .playBtn:hover {
+            background: #6f60e8;
+        }
+
+        .footer {
+            margin-top: 35px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @media(max-width: 800px) {
+
+            .games {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width: 550px) {
+
+            .games {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 40px;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="arcade">
+
+    <div class="logo">
+        🎮 CHAOS ARCADE
+    </div>
+
+    <p class="subtitle">
+        Welcome to the most unnecessary gaming website ever. 💀
+        <br>
+        Choose your chaos 👇
+    </p>
+
+
+    <div class="games">
+
+        <!-- Reaction -->
+
+        <div class="gameCard">
+
+            <div class="gameIcon">
+                ⚡
+            </div>
+
+            <h2>
+                Reaction Rush
+            </h2>
+
+            <p>
+                How fast are your reflexes?
+            </p>
+
+            <button class="playBtn"
+                    onclick="location.href='reaction.html'">
+                PLAY 🎮
+            </button>
+
+        </div>
+
+
+        <!-- Catch -->
+
+        <div class="gameCard">
+
+            <div class="gameIcon">
+                🎯
+            </div>
+
+            <h2>
+                Catch Me
+            </h2>
+
+            <p>
+                Catch the crazy emoji!
+            </p>
+
+            <button class="playBtn"
+                    onclick="location.href='catch.html'">
+                PLAY 🎮
+            </button>
+
+        </div>
+
+
+        <!-- Memory -->
+
+        <div class="gameCard">
+
+            <div class="gameIcon">
+                🧠
+            </div>
+
+            <h2>
+                Memory Madness
+            </h2>
+
+            <p>
+                Match all the emoji pairs.
+            </p>
+
+            <button class="playBtn"
+                    onclick="location.href='memory.html'">
+                PLAY 🎮
+            </button>
+
+        </div>
+
+
+        <!-- RPS -->
+
+        <div class="gameCard">
+
+            <div class="gameIcon">
+                ✋
+            </div>
+
+            <h2>
+                Rock Paper Scissors
+            </h2>
+
+            <p>
+                Can you defeat the computer?
+            </p>
+
+            <button class="playBtn"
+                    onclick="location.href='rps.html'">
+                PLAY 🎮
+            </button>
+
+        </div>
+
+
+        <!-- Don't Press -->
+
+        <div class="gameCard">
+
+            <div class="gameIcon">
+                🚫
+            </div>
+
+            <h2>
+                Don't Press
+            </h2>
+
+            <p>
+                Seriously... DON'T press it. 👀
+            </p>
+
+            <button class="playBtn"
+                    onclick="location.href='dontpress.html'">
+                PLAY 🎮
+            </button>
+
+        </div>
+
+
+        <!-- Racing -->
+
+        <div class="gameCard">
+
+            <div class="gameIcon">
+                🏎️
+            </div>
+
+            <h2>
+                Chaos Racing
+            </h2>
+
+            <p>
+                Dodge traffic and survive!
+            </p>
+
+            <button class="playBtn"
+                    onclick="location.href='racing.html'">
+                PLAY 🎮
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        Made with 💀 + ☕ + questionable decisions
+
+    </div>
+
+</div>
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>

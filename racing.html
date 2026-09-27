@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chaos Arcade - Mini Racing</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .raceGame {
+            text-align: center;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .raceStats {
+            display: flex;
+            justify-content: space-between;
+            background: #20202d;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        #road {
+            width: 360px;
+            height: 550px;
+            max-width: 100%;
+            margin: auto;
+            background: #333;
+            border-left: 8px solid #eee;
+            border-right: 8px solid #eee;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .roadLine {
+            position: absolute;
+            width: 8px;
+            height: 80px;
+            background: white;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.8;
+        }
+
+        #car {
+            position: absolute;
+            bottom: 30px;
+            left: 150px;
+            font-size: 55px;
+            z-index: 5;
+            transition: left 0.08s;
+        }
+
+        .enemy {
+            position: absolute;
+            font-size: 50px;
+            z-index: 4;
+        }
+
+        #startScreen {
+            position: absolute;
+            inset: 0;
+            background: rgba(20,20,30,0.92);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #startScreen .bigEmoji {
+            font-size: 70px;
+        }
+
+        #message {
+            min-height: 55px;
+            margin: 20px;
+            color: #ffd166;
+            font-size: 20px;
+        }
+
+        .controls {
+            margin-top: 20px;
+            color: #aaa;
+        }
+
+        .mobileControls {
+            display: none;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .mobileControls button {
+            width: 70px;
+            height: 50px;
+            font-size: 25px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        @media(max-width:600px) {
+
+            #road {
+                height: 500px;
+            }
+
+            .mobileControls {
+                display: flex;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="top">
+
+        <h1>🏎️ CHAOS RACING</h1>
+
+        <p>
+            Dodge the traffic. Survive the chaos. 💀
+        </p>
+
+    </div>
+
+
+    <div class="raceGame">
+
+        <div class="raceStats">
+
+            <span>
+                🏆 Score:
+                <b id="score">0</b>
+            </span>
+
+            <span>
+                ❤️ Lives:
+                <b id="lives">3</b>
+            </span>
+
+        </div>
+
+
+        <div id="road">
+
+            <div id="startScreen">
+
+                <div class="bigEmoji">
+                    🏎️
+                </div>
+
+                <h2>READY TO RACE?</h2>
+
+                <p>
+                    Use ⬅️ ➡️ to move your car.
+                </p>
+
+                <br>
+
+                <button onclick="startRace()">
+                    🏁 START RACE
+                </button>
+
+            </div>
+
+
+            <div id="car">
+                🏎️
+            </div>
+
+        </div>
+
+
+        <div class="controls">
+            ⬅️ LEFT &nbsp;&nbsp; RIGHT ➡️
+        </div>
+
+
+        <div class="mobileControls">
+
+            <button onclick="moveLeft()">
+                ⬅️
+            </button>
+
+            <button onclick="moveRight()">
+                ➡️
+            </button>
+
+        </div>
+
+
+        <div id="message">
+            Avoid the cars! 👀
+        </div>
+
+
+        <button onclick="location.reload()">
+            🔄 RESTART
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let carX = 150;
+
+let score = 0;
+
+let lives = 3;
+
+let gameRunning = false;
+
+let enemyTimer;
+
+let scoreTimer;
+
+const road =
+    document.getElementById("road");
+
+const car =
+    document.getElementById("car");
+
+
+// START GAME
+
+function startRace() {
+
+    gameRunning = true;
+
+    score = 0;
+
+    lives = 3;
+
+    carX = 150;
+
+    car.style.left = carX + "px";
+
+    document.getElementById("score").innerText =
+        score;
+
+    document.getElementById("lives").innerText =
+        lives;
+
+    document.getElementById("message").innerText =
+        "GO GO GO!!! 🏎️💨";
+
+    document.getElementById("startScreen").style.display =
+        "none";
+
+
+    // Create enemies
+
+    enemyTimer = setInterval(createEnemy, 900);
+
+
+    // Increase score
+
+    scoreTimer = setInterval(() => {
+
+        if (!gameRunning) return;
+
+        score++;
+
+        document.getElementById("score").innerText =
+            score;
+
+    }, 500);
+
+}
+
+
+// MOVE LEFT
+
+function moveLeft() {
+
+    if (!gameRunning) return;
+
+    carX -= 35;
+
+    if (carX < 10) {
+        carX = 10;
+    }
+
+    car.style.left = carX + "px";
+
+}
+
+
+// MOVE RIGHT
+
+function moveRight() {
+
+    if (!gameRunning) return;
+
+    carX += 35;
+
+    const maxX =
+        road.clientWidth - 70;
+
+    if (carX > maxX) {
+        carX = maxX;
+    }
+
+    car.style.left = carX + "px";
+
+}
+
+
+// KEYBOARD CONTROLS
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "ArrowLeft") {
+
+        moveLeft();
+
+    }
+
+    if (event.key === "ArrowRight") {
+
+        moveRight();
+
+    }
+
+});
+
+
+// CREATE ENEMY
+
+function createEnemy() {
+
+    if (!gameRunning) return;
+
+
+    const enemy =
+        document.createElement("div");
+
+    enemy.className = "enemy";
+
+
+    const enemyEmojis = [
+        "🚗",
+        "🚙",
+        "🚕",
+        "🚓",
+        "🚌"
+    ];
+
+
+    enemy.innerText =
+        enemyEmojis[
+            Math.floor(
+                Math.random() *
+                enemyEmojis.length
+            )
+        ];
+
+
+    const maxX =
+        road.clientWidth - 60;
+
+
+    enemy.style.left =
+        Math.random() * maxX + "px";
+
+    enemy.style.top =
+        "-70px";
+
+
+    road.appendChild(enemy);
+
+
+    let enemyY = -70;
+
+
+    const moveEnemy =
+        setInterval(() => {
+
+            if (!gameRunning) {
+
+                clearInterval(moveEnemy);
+
+                enemy.remove();
+
+                return;
+
+            }
+
+
+            enemyY += 5;
+
+            enemy.style.top =
+                enemyY + "px";
+
+
+            checkCollision(
+                enemy,
+                moveEnemy
+            );
+
+
+            if (
+                enemyY >
+                road.clientHeight
+            ) {
+
+                clearInterval(moveEnemy);
+
+                enemy.remove();
+
+            }
+
+        }, 30);
+
+}
+
+
+// COLLISION
+
+function checkCollision(enemy, moveEnemy) {
+
+    const carRect =
+        car.getBoundingClientRect();
+
+    const enemyRect =
+        enemy.getBoundingClientRect();
+
+
+    const collision = !(
+        carRect.right < enemyRect.left ||
+
+        carRect.left > enemyRect.right ||
+
+        carRect.bottom < enemyRect.top ||
+
+        carRect.top > enemyRect.bottom
+    );
+
+
+    if (collision) {
+
+        clearInterval(moveEnemy);
+
+        enemy.remove();
+
+        lives--;
+
+        document.getElementById("lives").innerText =
+            lives;
+
+
+        const messages = [
+
+            "💀 OOPS! YOU GOT HIT!",
+
+            "😭 BRO LOOK AT THE ROAD!",
+
+            "😂 THAT CAR CAME OUT OF NOWHERE!",
+
+            "🤦 DRIVE BETTER BRO!"
+
+        ];
+
+
+        document.getElementById("message").innerText =
+            messages[
+                Math.floor(
+                    Math.random() *
+                    messages.length
+                )
+            ];
+
+
+        if (lives <= 0) {
+
+            endGame();
+
+        }
+
+    }
+
+}
+
+
+// GAME OVER
+
+function endGame() {
+
+    gameRunning = false;
+
+    clearInterval(enemyTimer);
+
+    clearInterval(scoreTimer);
+
+
+    document.getElementById("message").innerHTML = `
+
+        💥 <b>GAME OVER!</b><br>
+
+        🏆 Final Score:
+        <b>${score}</b><br><br>
+
+        ${
+            score >= 30
+            ? "🔥 BRO IS A RACING LEGEND!"
+            : score >= 15
+            ? "😎 Not bad, driver!"
+            : "💀 Your driving license has been cancelled."
+        }
+
+    `;
+
+}
+
+
+// Start with score reset
+
+document.getElementById("score").innerText =
+    "0";
+
+document.getElementById("lives").innerText =
+    "3";
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos Arcade - Memory Madness</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .memoryBoard {
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .memoryCard {
+            height: 120px;
+            border: none;
+            border-radius: 18px;
+            background: #8b7cff;
+            color: white;
+            font-size: 45px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .memoryCard:hover {
+            transform: scale(1.04);
+        }
+
+        .memoryCard.flipped,
+        .memoryCard.matched {
+            background: #29293b;
+        }
+
+        .memoryCard.matched {
+            background: #28c76f;
+        }
+
+        .memoryStats {
+            display: flex;
+            justify-content: space-between;
+            background: #20202d;
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        @media(max-width:600px) {
+
+            .memoryCard {
+                height: 80px;
+                font-size: 32px;
+            }
+
+            .memoryBoard {
+                gap: 8px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="top">
+
+        <h1>🧠 MEMORY MADNESS</h1>
+
+        <p>
+            Find all the matching pairs! 💀
+        </p>
+
+    </div>
+
+
+    <div class="memoryStats">
+
+        <span>
+            Moves: <b id="moves">0</b>
+        </span>
+
+        <span>
+            Pairs: <b id="pairs">0</b>/4
+        </span>
+
+    </div>
+
+
+    <div id="board" class="memoryBoard"></div>
+
+
+    <div id="message" class="result">
+
+        🧠 Find the matching emojis!
+
+    </div>
+
+
+    <button onclick="restartGame()">
+        🔄 RESTART
+    </button>
+
+</div>
+
+
+<script>
+
+const emojis = [
+    "🍕",
+    "🍕",
+    "🐸",
+    "🐸",
+    "👻",
+    "👻",
+    "🦄",
+    "🦄"
+];
+
+let cards = [];
+let firstCard = null;
+let secondCard = null;
+
+let lockBoard = false;
+
+let moves = 0;
+let pairs = 0;
+
+
+function shuffle(array) {
+
+    return array.sort(() => Math.random() - 0.5);
+
+}
+
+
+function createGame() {
+
+    const board = document.getElementById("board");
+
+    board.innerHTML = "";
+
+    cards = shuffle([...emojis]);
+
+    firstCard = null;
+    secondCard = null;
+
+    lockBoard = false;
+
+    moves = 0;
+    pairs = 0;
+
+    document.getElementById("moves").innerText = moves;
+
+    document.getElementById("pairs").innerText = pairs;
+
+    document.getElementById("message").innerText =
+        "🧠 Find the matching emojis!";
+
+    cards.forEach((emoji, index) => {
+
+        const card = document.createElement("button");
+
+        card.className = "memoryCard";
+
+        card.dataset.emoji = emoji;
+
+        card.dataset.index = index;
+
+        card.innerText = "❓";
+
+        card.onclick = () => flipCard(card);
+
+        board.appendChild(card);
+
+    });
+
+}
+
+
+function flipCard(card) {
+
+    if (lockBoard) return;
+
+    if (card === firstCard) return;
+
+    if (card.classList.contains("matched")) return;
+
+
+    card.innerText = card.dataset.emoji;
+
+    card.classList.add("flipped");
+
+
+    if (!firstCard) {
+
+        firstCard = card;
+
+        return;
+
+    }
+
+
+    secondCard = card;
+
+    moves++;
+
+    document.getElementById("moves").innerText = moves;
+
+    checkMatch();
+
+}
+
+
+function checkMatch() {
+
+    const match =
+        firstCard.dataset.emoji === secondCard.dataset.emoji;
+
+
+    if (match) {
+
+        firstCard.classList.add("matched");
+
+        secondCard.classList.add("matched");
+
+        pairs++;
+
+        document.getElementById("pairs").innerText = pairs;
+
+        document.getElementById("message").innerText =
+            "🎉 MATCH! Nice one!";
+
+        resetCards();
+
+
+        if (pairs === 4) {
+
+            setTimeout(() => {
+
+                document.getElementById("message").innerHTML = `
+                    🏆 <b>YOU WON!</b><br><br>
+                    You found all 4 pairs in ${moves} moves!<br>
+                    ${getReaction()}
+                `;
+
+            }, 400);
+
+        }
+
+    }
+
+    else {
+
+        lockBoard = true;
+
+        document.getElementById("message").innerText =
+            "💀 Nope! Try again...";
+
+
+        setTimeout(() => {
+
+            firstCard.innerText = "❓";
+            secondCard.innerText = "❓";
+
+            firstCard.classList.remove("flipped");
+            secondCard.classList.remove("flipped");
+
+            resetCards();
+
+        }, 800);
+
+    }
+
+}
+
+
+function resetCards() {
+
+    firstCard = null;
+    secondCard = null;
+
+    lockBoard = false;
+
+}
+
+
+function getReaction() {
+
+    if (moves <= 6) {
+        return "🔥 MEMORY GOD MODE!";
+    }
+
+    if (moves <= 10) {
+        return "😎 That's actually good!";
+    }
+
+    if (moves <= 15) {
+        return "😂 Your brain was loading...";
+    }
+
+    return "💀 Bro was fighting for survival!";
+
+}
+
+
+function restartGame() {
+
+    createGame();
+
+}
+
+
+createGame();
+
+</script>
+
+</body>
+</html>

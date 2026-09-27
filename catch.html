@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch Me If You Can</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="game">
+
+    <div class="top">
+        <h1>🎯 CATCH ME IF YOU CAN</h1>
+        <p>Catch the emoji before time runs out! 😈</p>
+    </div>
+
+    <div class="scoreBox">
+        <span>Score: <b id="score">0</b></span>
+        <span>Time: <b id="time">15</b>s</span>
+    </div>
+
+    <div id="catchArea" class="gameArea">
+
+        <div id="startScreen">
+            <div class="emoji">😈</div>
+
+            <h2>Think you can catch me?</h2>
+
+            <p>
+                Click the emoji as many times as possible!
+            </p>
+
+            <button onclick="startCatch()">START GAME</button>
+        </div>
+
+        <button id="target" onclick="catchEmoji()">😈</button>
+
+    </div>
+
+    <div id="result" class="result"></div>
+
+</div>
+
+<script>
+
+let score = 0;
+let timeLeft = 15;
+let gameStarted = false;
+let timer;
+
+const target = document.getElementById("target");
+const area = document.getElementById("catchArea");
+
+function startCatch() {
+
+    score = 0;
+    timeLeft = 15;
+    gameStarted = true;
+
+    document.getElementById("score").innerText = score;
+    document.getElementById("time").innerText = timeLeft;
+
+    document.getElementById("startScreen").style.display = "none";
+
+    target.style.display = "block";
+
+    moveTarget();
+
+    timer = setInterval(() => {
+
+        timeLeft--;
+
+        document.getElementById("time").innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+
+            clearInterval(timer);
+
+            gameStarted = false;
+
+            target.style.display = "none";
+
+            showResult();
+        }
+
+    }, 1000);
+}
+
+
+function catchEmoji() {
+
+    if (!gameStarted) return;
+
+    score++;
+
+    document.getElementById("score").innerText = score;
+
+    moveTarget();
+}
+
+
+function moveTarget() {
+
+    const areaWidth = area.clientWidth;
+    const areaHeight = area.clientHeight;
+
+    const x = Math.random() * (areaWidth - 80);
+    const y = Math.random() * (areaHeight - 80);
+
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+
+    const emojis = ["😈", "👻", "🤡", "🐸", "👽", "💀", "😂"];
+
+    target.innerText =
+        emojis[Math.floor(Math.random() * emojis.length)];
+}
+
+
+function showResult() {
+
+    let message;
+
+    if (score >= 20) {
+        message = "🔥 BROOO! HUMAN AIMBOT!";
+    }
+    else if (score >= 15) {
+        message = "😎 That's actually FAST!";
+    }
+    else if (score >= 8) {
+        message = "😂 Not bad... the emoji survived!";
+    }
+    else {
+        message = "🐢 Bro was catching air!";
+    }
+
+    document.getElementById("result").innerHTML = `
+        <h2>🎉 GAME OVER!</h2>
+        <p>You caught <b>${score}</b> emojis.</p>
+        <p>${message}</p>
+        <br>
+        <button onclick="location.reload()">PLAY AGAIN</button>
+    `;
+}
+
+</script>
+
+</body>
+</html>
