@@ -1,16 +1,15 @@
 {
   "name": "Chaos Arcade",
   "short_name": "Chaos Arcade",
-  "description": "A crazy mini-game arcade 🎮",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#11111b",
   "theme_color": "#8b7cff",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "icon.png",
-      "sizes": "512x512",
+      "sizes": "1254x1254",
       "type": "image/png"
     }
   ]
